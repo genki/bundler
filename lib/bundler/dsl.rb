@@ -198,7 +198,7 @@ module Bundler
     def _normalize_options(name, version, opts)
       _normalize_hash(opts)
 
-      valid_keys = %w(group groups git gist github path name branch ref tag require submodules platform platforms type)
+      valid_keys = %w(group groups git gist github path name branch ref tag require submodules platform platforms type ignore_dependencies)
       invalid_keys = opts.keys - valid_keys
       if invalid_keys.any?
         plural = invalid_keys.size > 1

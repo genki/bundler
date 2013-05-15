@@ -7,6 +7,7 @@ module Bundler
     attr_reader :autorequire
     attr_reader :groups
     attr_reader :platforms
+    attr_reader :ignore_dependencies
 
     PLATFORM_MAP = {
       :ruby     => Gem::Platform::RUBY,
@@ -35,6 +36,7 @@ module Bundler
       @source      = options["source"]
       @platforms   = Array(options["platforms"])
       @env         = options["env"]
+      @ignore_dependencies = options["ignore_dependencies"]
 
       if options.key?('require')
         @autorequire = Array(options['require'] || [])

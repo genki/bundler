@@ -345,18 +345,20 @@ module Bundler
       debug { "  Activating: #{spec_group.name} (#{spec_group.version})" }
       debug { spec_group.required_by.map { |d| "    * #{d.name} (#{d.requirement})" }.join("\n") }
 
-      dependencies = spec_group.activate_platform(requirement.__platform)
+      unless requirement.options["ignore_dependencies"]
+        dependencies = spec_group.activate_platform(requirement.__platform)
 
-      # Now, we have to loop through all child dependencies and add them to our
-      # array of requirements.
-      debug { "    Dependencies"}
-      dependencies.each do |dep|
-        next if dep.type == :development
-        debug { "    * #{dep.name} (#{dep.requirement})" }
-        dep.required_by.replace(requirement.required_by)
-        dep.required_by << requirement
-        @gems_size[dep] ||= gems_size(dep)
-        reqs << dep
+        # Now, we have to loop through all child dependencies and add them to
+        # our array of requirements.
+        debug { "    Dependencies"}
+        dependencies.each do |dep|
+          next if dep.type == :development
+          debug { "    * #{dep.name} (#{dep.requirement})" }
+          dep.required_by.replace(requirement.required_by)
+          dep.required_by << requirement
+          @gems_size[dep] ||= gems_size(dep)
+          reqs << dep
+        end
       end
 
       # We create a savepoint and mark it by the name of the requirement that caused
